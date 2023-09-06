@@ -3,19 +3,24 @@ use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let (query, file_path) = parse_config(&args);
+    let config = parse_config(&args);
 
-    println!("query is {}", query);
-    println!("file_path is {}", file_path);
+    println!("query is {}", config.query);
+    println!("file_path is {}", config.file_path);
 
-    let content = fs::read_to_string(file_path).expect("Should have been able to read the file");
+    let content = fs::read_to_string(config.file_path).expect("Should have been able to read the file");
 
     println!("file content:\n{content}");
 }
 
-fn parse_config(args: &[String]) -> (&str, &str) {
-    let query = &args[1];
-    let file_path = &args[2];
+struct Config {
+    query: String,
+    file_path: String,
+}
 
-    (query, file_path)
+fn parse_config(args: &[String]) -> Config {
+    let query = args[1].clone();
+    let file_path = args[2].clone();
+
+    Config { query, file_path }
 }
